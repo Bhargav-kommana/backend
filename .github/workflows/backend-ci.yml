@@ -1,55 +1,57 @@
 name: Build and Push Backend Images
 
 on:
-  push:
-    branches:
-      - master
+push:
+branches:
+- master
+workflow_dispatch:
 
 jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
+build-and-push:
+runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
+```
+steps:
+  - name: Checkout Code
+    uses: actions/checkout@v4
 
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+  - name: Configure AWS Credentials
+    uses: aws-actions/configure-aws-credentials@v4
+    with:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v2
+  - name: Login to Amazon ECR
+    uses: aws-actions/amazon-ecr-login@v2
 
-      # User Service
-      - name: Build User Service Image
-        run: |
-          docker build -t user-service:v1 ./user-service
-          docker tag user-service:v1 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/user-service:v1
+  # User Service
+  - name: Build User Service Image
+    run: |
+      docker build -t user-service:v1 ./user-service
+      docker tag user-service:v1 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/user-service:v1
 
-      - name: Push User Service Image
-        run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/user-service:v1
+  - name: Push User Service Image
+    run: |
+      docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/user-service:v1
 
-      # Product Service
-      - name: Build Product Service Image
-        run: |
-          docker build -t product-service:v1 ./product-service
-          docker tag product-service:v1 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/product-service:v1
+  # Product Service
+  - name: Build Product Service Image
+    run: |
+      docker build -t product-service:v1 ./product-service
+      docker tag product-service:v1 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/product-service:v1
 
-      - name: Push Product Service Image
-        run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/product-service:v1
+  - name: Push Product Service Image
+    run: |
+      docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/product-service:v1
 
-      # Order Service
-      - name: Build Order Service Image
-        run: |
-          docker build -t order-service:v1 ./order-service
-          docker tag order-service:v1 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/order-service:v1
+  # Order Service
+  - name: Build Order Service Image
+    run: |
+      docker build -t order-service:v1 ./order-service
+      docker tag order-service:v1 ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/order-service:v1
 
-      - name: Push Order Service Image
-        run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/order-service:v1
+  - name: Push Order Service Image
+    run: |
+      docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/order-service:v1
+```

@@ -54,4 +54,4 @@ steps:
   - name: Push Order Service Image
     run: |
       docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/order-service:v1
-```
+
